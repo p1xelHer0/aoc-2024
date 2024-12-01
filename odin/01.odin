@@ -10,8 +10,8 @@ import "core:testing"
 // SHARED //////////////////////////////////////////////////////////////////////
 
 parse_line :: proc(line: string) -> (int, int) {
-    a := strings.split(line, "   ", context.temp_allocator)
-    return strconv.atoi(a[0]), strconv.atoi(a[1])
+    str := strings.split(line, "   ", context.temp_allocator)
+    return strconv.atoi(str[0]), strconv.atoi(str[1])
 }
 
 // PART 1 //////////////////////////////////////////////////////////////////////
