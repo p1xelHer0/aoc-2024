@@ -1,0 +1,17 @@
+# direnv
+.direnv
+
+# Odin
+**.bin
+
+# Janet
+jpm_tree
+**.tested
+
+# Zig
+.zig-cache
+zig-cache
+zig-out
+
+# macOS
+.DS_Store
