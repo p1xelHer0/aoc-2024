@@ -1,25 +1,24 @@
 {
-  description = "Advent of Code in Janet";
+  description = "Advent of Code in Haskell";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:nixos/nixpkgs/haskell-updates";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
+        pkgs = nixpkgs.legacyPackages.${system};
+
+        haskellPackages = pkgs.haskell.packages.ghc9101;
 
         aoc-script = pkgs.writeShellScriptBin "aoc" ''
           cmd=$(basename $0)
           usage() {
               echo -e "Usage:\n" \
                       "  $cmd run [DAY]\t [01-25]\n" \
-                      "  $cmd watch [DAY]\t [01]-25]\n" \
-                      "  $cmd deps\n"
+                      "  $cmd watch [DAY]\t [01]-25]\n"
           }
 
           if [ -z "$1" ]; then
@@ -58,9 +57,11 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            janet
-            jpm
+          buildInputs = [
+            haskellPackages.ghc
+            haskellPackages.haskell-language-server
+            haskellPackages.ghcid
+            haskellPackages.cabal-install
             aoc-script
           ];
         };

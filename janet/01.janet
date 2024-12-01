@@ -5,20 +5,23 @@
 
 ## SHARED ######################################################################
 
-(defn id [x] x)
+(def peg ~{
+  :main (split "\n" :line)
+  :line (split "   " :locations)
+  :locations (* (at-least 2 (number :d+)))
+  })
+
+(test (peg/match peg sample) 11)
 
 ## PART 1 ######################################################################
 
-(defn solve-1 [input] input)
+(defn part-1 [input] input)
 
 ## PART 2 ######################################################################
 
-(defn solve-2 [input] input)
+(defn part-2 [input] input)
 
 ################################################################################
 
-(test (solve-1 sample) 0)
-(test (solve-2 sample) 0)
-
-(test (solve-1 input) 0)
-(test (solve-2 input) 0)
+(test (part-1 sample) 11)
+(test (part-2 sample) 31)

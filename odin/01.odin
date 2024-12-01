@@ -10,8 +10,8 @@ import "core:testing"
 // SHARED //////////////////////////////////////////////////////////////////////
 
 parse_line :: proc(line: string) -> (int, int) {
-    str := strings.split(line, "   ", context.temp_allocator)
-    return strconv.atoi(str[0]), strconv.atoi(str[1])
+    strs := strings.split(line, "   ", context.temp_allocator)
+    return strconv.atoi(strs[0]), strconv.atoi(strs[1])
 }
 
 // PART 1 //////////////////////////////////////////////////////////////////////
@@ -24,11 +24,9 @@ part_1 :: proc(input: string) -> int {
     it := string(input)
     for line in strings.split_lines_iterator(&it) {
         r1, r2 := parse_line(line)
-
         append(&list_1, r1)
         append(&list_2, r2)
     }
-
     slice.sort(list_1[:])
     slice.sort(list_2[:])
 
@@ -51,7 +49,6 @@ part_2 :: proc(input: string) -> int {
     it := string(input)
     for line in strings.split_lines_iterator(&it) {
         r1, r2 := parse_line(line)
-
         append(&list_1, r1)
         append(&list_2, r2)
     }
