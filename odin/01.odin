@@ -17,57 +17,52 @@ parse_line :: proc(line: string) -> (int, int) {
 // PART 1 //////////////////////////////////////////////////////////////////////
 
 part_1 :: proc(input: string) -> int {
-    list_1: [dynamic]int = {}
-    list_2: [dynamic]int = {}
-    defer {delete(list_1);delete(list_2)}
+    left := make([dynamic]int, 0, context.temp_allocator)
+    right := make([dynamic]int, 0, context.temp_allocator)
 
-    it := string(input)
+    it := input
     for line in strings.split_lines_iterator(&it) {
         r1, r2 := parse_line(line)
-        append(&list_1, r1)
-        append(&list_2, r2)
+        append(&left, r1)
+        append(&right, r2)
     }
-    slice.sort(list_1[:])
-    slice.sort(list_2[:])
+    slice.sort(left[:])
+    slice.sort(right[:])
 
-    result: [dynamic]int = {}
-    defer delete(result)
-    for _, idx in list_1 {
-        append(&result, abs(list_1[idx] - list_2[idx]))
+    result := 0
+    for _, idx in left {
+        result += abs(left[idx] - right[idx])
     }
 
-    return math.sum(result[:])
+    return result
 }
 
 // PART 2 //////////////////////////////////////////////////////////////////////
 
 part_2 :: proc(input: string) -> int {
-    list_1: [dynamic]int = {}
-    list_2: [dynamic]int = {}
-    defer {delete(list_1);delete(list_2)}
+    left := make([dynamic]int, 0, context.temp_allocator)
+    right := make([dynamic]int, 0, context.temp_allocator)
 
-    it := string(input)
+    it := input
     for line in strings.split_lines_iterator(&it) {
         r1, r2 := parse_line(line)
-        append(&list_1, r1)
-        append(&list_2, r2)
+        append(&left, r1)
+        append(&right, r2)
     }
 
-    similarity_lookup := make(map[int]int)
-    defer delete(similarity_lookup)
-    for loc_id in list_2 {
+    similarity_lookup := make(map[int]int, context.temp_allocator)
+    for loc_id in right {
         similarity := similarity_lookup[loc_id] or_else 0
         similarity_lookup[loc_id] = similarity + 1
     }
 
-    result: [dynamic]int = {}
-    defer delete(result)
-    for loc_id in list_1 {
+    result := 0
+    for loc_id in left {
         similarity := similarity_lookup[loc_id] or_else 0
-        append(&result, similarity * loc_id)
+        result += similarity * loc_id
     }
 
-    return math.sum(result[:])
+    return result
 }
 
 ////////////////////////////////////////////////////////////////////////////////
