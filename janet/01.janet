@@ -1,7 +1,7 @@
 (use judge)
 
-(def sample (slurp "../inputs/01.sample"))
-(def input (slurp "../inputs/01.input"))
+(def sample (slurp "../input/01.sample"))
+(def input (slurp "../input/01.input"))
 
 ## SHARED ######################################################################
 

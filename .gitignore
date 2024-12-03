@@ -17,5 +17,5 @@ jpm_tree
 .DS_Store
 
 # Advent of Code
-inputs/[0-2][0-9].input
-inputs/[0-2][0-9].sample
+[0-2][0-9].input
+[0-2][0-9].sample

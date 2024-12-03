@@ -69,14 +69,14 @@ part_2 :: proc(input: string) -> int {
 
 @(test)
 test :: proc(t: ^testing.T) {
-    sample :: #load("../inputs/01.sample", string)
+    sample :: #load("../input/01.sample", string)
 
     testing.expect_value(t, part_1(sample), 11)
     testing.expect_value(t, part_2(sample), 31)
 }
 
 main :: proc() {
-    input :: #load("../inputs/01.input", string)
+    input :: #load("../input/01.input", string)
 
     fmt.printfln("Part 1: %d", part_1(input))
     fmt.printfln("Part 2: %d", part_2(input))
