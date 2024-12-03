@@ -3,16 +3,19 @@
 
 # Odin
 **.bin
-[0-9][0-9]
+[0-2][0-9]
+
+# Haskell
+**.o
+**.hi
 
 # Janet
 jpm_tree
 **.tested
 
-# Zig
-.zig-cache
-zig-cache
-zig-out
-
 # macOS
 .DS_Store
+
+# Advent of Code
+inputs/[0-2][0-9].input
+inputs/[0-2][0-9].sample
