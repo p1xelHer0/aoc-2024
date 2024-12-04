@@ -1,13 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/DanielGavin/ols/master/misc/ols.schema.json",
-  "collections": [
-    {
-      "name": "src",
-      "path": "src"
-    }
-  ],
-  "profile": "default",
-  "profiles": [{ "name": "default", "checker_path": ["src"] }],
+  "profile": "default", "profiles": [{ "name": "default", "checker_path": ["./"] }],
   "checker_args": "-strict-style",
   "enable_document_symbols": true,
   "enable_format": true,
