@@ -5,10 +5,9 @@
 
 ## SHARED ######################################################################
 
-(def peg ~{
-  :main (split "\n" (group :line))
-  :line (* (number :d+) :s+ (number :d+))
-  })
+(def peg
+  ~{:line (* (number :d+) :s+ (number :d+))
+    :main (split "\n" (group :line))})
 
 (test (peg/match peg sample)
   @[@[3 4]
