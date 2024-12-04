@@ -35,12 +35,12 @@ Dirs :: bit_set[Dir;u8]
 
 find_xmas :: proc(pos: [2]int, dir: Dir, grid: [][]rune) -> bool {
     result := make([dynamic]rune, 0, 4, context.temp_allocator)
-    xmas := "XMAS"
+    XMAS :: "XMAS"
 
     curr_pos := pos
     next := Dir_Vecs[dir]
     bounds: [2]int = {len(grid[0]) - 1, len(grid) - 1}
-    for i := 0; i < len(xmas); i += 1 {
+    for i := 0; i < len(XMAS); i += 1 {
         if curr_pos.x <= bounds.x &&
            curr_pos.x >= 0 &&
            curr_pos.y <= bounds.y &&
@@ -52,7 +52,7 @@ find_xmas :: proc(pos: [2]int, dir: Dir, grid: [][]rune) -> bool {
         curr_pos += next
     }
 
-    return utf8.runes_to_string(result[:], context.temp_allocator) == xmas
+    return utf8.runes_to_string(result[:], context.temp_allocator) == XMAS
 }
 
 find_xmas_in_directions :: proc(start_pos: [2]int, grid: [][]rune) -> int {
@@ -117,7 +117,7 @@ find_x_mas :: proc(pos: [2]int, grid: [][]rune) -> bool {
     }
 
     x_mas_text := utf8.runes_to_string(result[:], context.temp_allocator)
-    valid_combinations: []string = {"MMSS", "MSMS", "SSMM", "SMSM"}
+    valid_combinations: []string : {"MMSS", "MSMS", "SSMM", "SMSM"}
 
     return slice.contains(valid_combinations, x_mas_text)
 }
