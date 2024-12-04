@@ -51,7 +51,7 @@
                   ;;
 
               "repl")
-                  ${pkgs.janet}/bin/janet -e "(import spork/netrepl) (netrepl/server)"
+                  ./jpm_tree/bin/janet-netrepl
                   ;;
           esac
         '';
