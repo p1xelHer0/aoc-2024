@@ -1,12 +1,10 @@
 package aoc
 
 import "core:fmt"
-import "core:log"
 import "core:slice"
 import "core:strconv"
 import "core:strings"
 import "core:testing"
-import "core:unicode/utf8"
 
 // SHARED //////////////////////////////////////////////////////////////////////
 
