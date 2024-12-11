@@ -28,15 +28,10 @@ blink :: proc(stones: map[uint]uint) -> map[uint]uint {
             digits := fmt.tprintf("%v", mark)
             if len(digits) % 2 == 0 {
                 lhs, rhs := split_uint(digits)
-
-                lhs_amount := stones[lhs] or_else 0
-                rhs_amount := stones[rhs] or_else 0
-
                 result[lhs] += amount
                 result[rhs] += amount
             } else {
-                next_mark := mark * 2024
-                result[next_mark] += amount
+                result[mark * 2024] += amount
             }
         }
     }
