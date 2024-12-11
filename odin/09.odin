@@ -5,7 +5,7 @@ import "core:slice"
 import "core:strconv"
 import "core:strings"
 
-// SHARED //////////////////////////////////////////////////////////////////////
+// PART 1 //////////////////////////////////////////////////////////////////////
 
 parse_disk :: proc(input: string) -> []int {
     disk: [dynamic]int
@@ -41,8 +41,6 @@ print_disk :: proc(disk: []int) {
     fmt.print("\n")
 }
 
-// PART 1 //////////////////////////////////////////////////////////////////////
-
 part_1_day_9 :: proc(input: string) -> int {
     disk := parse_disk(input)
 
@@ -72,85 +70,72 @@ part_1_day_9 :: proc(input: string) -> int {
 // PART 2 //////////////////////////////////////////////////////////////////////
 
 Block :: struct {
-    value: int,
-    start: int,
-    len:   int,
+    pos: int,
+    len: int,
 }
 
 part_2_day_9 :: proc(input: string) -> int {
     disk := parse_disk(input)
-    blocks: [dynamic]Block
+    files: map[int]Block
+    blanks: [dynamic]Block
 
-    print_disk(disk)
-    for idx := 0; idx < len(disk); idx += 1 {
-        value := disk[idx]
-
-        block_len := 1
-        if idx + block_len < len(disk) {
-            block := disk[idx + block_len]
-            for block == value {
-                block_len += 1
-                if idx + block_len >= len(disk) do break
-                block = disk[idx + block_len]
-            }
-        }
-
+    file_id := 0
+    pos := 0
+    for ptr := 0; ptr < len(input) - 1; ptr += 1 {
+        x := int(input[ptr] - '0')
         block := Block {
-            start = idx,
-            len   = block_len,
-            value = value,
+            pos = pos,
+            len = x,
         }
-        append(&blocks, block)
-        idx += block_len - 1
+
+        if ptr % 2 == 0 {
+            files[file_id] = block
+            file_id += 1
+        } else {
+            append(&blanks, block)
+        }
+
+        pos += x
     }
 
-    fmt.printfln("blocks %v", blocks)
+    for file_id > 0 {
+        file_id -= 1
+        file := files[file_id]
 
-    find_block :: proc(blocks: []Block, value: int) -> []int {
-        result: [dynamic]int
-        for block, idx in blocks {
-            if block.value == value do append(&result, idx)
-        }
-        return result[:]
-    }
-
-    o: for idx := len(blocks) - 1; idx >= 0; idx -= 1 {
-        block := blocks[idx]
-        if block.value == -1 do continue
-        fmt.printfln("should we swap %v?", block)
-        swap_indexes := find_block(blocks[:], -1)
-        fmt.printfln("%v", swap_indexes)
-
-        for s_idx in swap_indexes {
-            bs := blocks[s_idx]
-            if bs.start + bs.len > block.start {
-                fmt.printfln(
-                    "%v leftmost -1 block right of block %v",
-                    bs,
-                    block,
-                )
-                break o
+        for blank, b_idx in blanks {
+            // the blank is rhs of the file, skip it
+            if blank.pos >= file.pos {
+                break
             }
 
-            fmt.printfln("can we swap %v and %v?", block, bs)
-            if bs.len >= block.len {
-                fmt.printfln("swapping %v with %v", block, bs)
-                for i := 0; i < block.len; i += 1 {
-                    disk[bs.start + i] = block.value
-                    disk[block.start + i] = bs.value
+            // the file can fit in the blank
+            if file.len <= blank.len {
+                // move the file to the blanks position
+                files[file_id] = Block {
+                    pos = blank.pos,
+                    len = file.len,
                 }
 
-                blocks[s_idx], blocks[idx] = blocks[idx], blocks[s_idx]
-                print_disk(disk)
-                fmt.printfln("continuing to next block")
-                continue o
+                // move the blank according to the file
+                // this can result in blanks with len 0 but we just ignore those
+                blanks[b_idx] = {
+                    pos = blank.pos + file.len,
+                    len = blank.len - file.len,
+                }
+
+                break
             }
         }
     }
 
-    print_disk(disk)
+    result := 0
+    for file_id, file in files {
+        for x in file.pos ..< file.pos + file.len {
+            result += file_id * x
+        }
+    }
 
-    return 0
+    return result
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -159,10 +144,10 @@ main :: proc() {
     input :: #load("../input/09.input", string)
     sample :: #load("../input/09.sample", string)
 
-    // p1 := part_1_day_9(sample)
-    // assert(p1 == 1928, fmt.tprintf("%v", p1))
+    p1 := part_1_day_9(sample)
+    assert(p1 == 1928, fmt.tprintf("%v", p1))
 
-    // fmt.printfln("Part 1: %d", part_1_day_9(input))
+    fmt.printfln("Part 1: %d", part_1_day_9(input))
 
     p2 := part_2_day_9(sample)
     assert(p2 == 2858, fmt.tprintf("%v", p2))
