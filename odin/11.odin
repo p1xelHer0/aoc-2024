@@ -49,14 +49,14 @@ day_11 :: proc(input: string, blink_times: uint) -> uint {
     it := strings.trim(input, "\n")
     for i in strings.split_iterator(&it, " ") {
         mark, _ := strconv.parse_uint(i)
-        amount := stones[mark] or_else 0
+        amount := stones[mark]
         stones[mark] = amount + 1
     }
 
     blink_times := blink_times
     for blink_times > 0 {
-        defer blink_times -= 1
         stones = blink(stones)
+        blink_times -= 1
     }
 
     result: uint = 0
