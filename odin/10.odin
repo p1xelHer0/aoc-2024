@@ -30,9 +30,7 @@ neightbour_in_bounds :: proc(v2: [2]int, bounds: [2]int) -> [][2]int {
     return result[:]
 }
 
-visited: [60][60]bool
-
-// PART 1 //////////////////////////////////////////////////////////////////////
+visited: [VISITED_SIZE][VISITED_SIZE]bool
 
 find_trailheads :: proc(
     start, bounds: [2]int,
@@ -58,6 +56,8 @@ find_trailheads :: proc(
 
     return score
 }
+
+// PART 1 //////////////////////////////////////////////////////////////////////
 
 part_1_day_10 :: proc(input: string) -> int {
     context.allocator = context.temp_allocator
