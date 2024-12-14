@@ -73,8 +73,77 @@ part_1_day_14 :: proc(input: string, bounds: [2]int) -> int {
 
 // PART 2 //////////////////////////////////////////////////////////////////////
 
+// don't try searching where previous starts have already been
+already_searched: [101][103]bool
+
+find_consecutive :: proc(
+    pos, dir: [2]int,
+    limit: int,
+    robot_pos: [101][103]bool,
+) -> bool {
+    score := 0
+
+    next_pos := pos + dir
+    for next_pos.x < 101 && next_pos.y < 103 {
+        if already_searched[next_pos.x][next_pos.y] do break
+        already_searched[next_pos.x][next_pos.y] = true
+
+        if robot_pos[next_pos.x][next_pos.y] {
+            score += 1
+            next_pos += dir
+        }
+    }
+
+    return score >= limit
+}
+
 part_2_day_14 :: proc(input: string, bounds: [2]int) -> int {
-    return 0
+    context.allocator = context.temp_allocator
+    robot_pos: [101][103]bool
+
+    robots: [dynamic]Robot
+    it := strings.trim(input, "\n")
+    for line in strings.split_iterator(&it, "\n") {
+        robot := parse_robot(line)
+        append(&robots, robot)
+    }
+
+    steps := 0
+    step: for steps < 10000 {
+        steps += 1
+
+        // reset the slices for each step simulation
+        for x in 0 ..< 101 do for y in 0 ..< 103 {
+            already_searched[x][y] = false
+            robot_pos[x][y] = false
+        }
+
+        for &robot in robots {
+            pos := simulate_step(&robot, steps, bounds)
+            robot_pos[pos.x][pos.y] = true
+        }
+
+        // for all points try to find consecutive robot positions
+        for y in 0 ..< 103 {
+            for x in 0 ..< 101 {
+                // I tried different directions here, it seems the tree has a
+                // frame so both {1, 1}, {1, 0} and {0, 1} works
+                if find_consecutive([2]int{x, y}, [2]int{1, 1}, 10, robot_pos) do break step
+            }
+        }
+    }
+
+    // look, a tree!
+    for y in 0 ..< 103 {
+        for x in 0 ..< 101 {
+            if robot_pos[x][y] do fmt.print("#")
+            else do fmt.print(".")
+        }
+
+        fmt.print("\n")
+    }
+
+    return steps
 }
 
 ////////////////////////////////////////////////////////////////////////////////
