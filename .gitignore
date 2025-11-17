@@ -1,9 +1,11 @@
-# direnv
-.direnv
-
-# Odin
+# C/Odin
+**.out
+**.dSYM
 **.bin
 [0-2][0-9]
+
+# direnv
+.direnv
 
 # Haskell
 **.o
